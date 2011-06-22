@@ -53,7 +53,7 @@ except ImportError, error:
     os.O_NDELAY = 0
 
 try:
-    from pytools import fileutil
+    from stsci.tools import fileutil
 except:
     fileutil=None
     

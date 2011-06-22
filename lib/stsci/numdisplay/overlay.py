@@ -4,7 +4,7 @@ import math
 import struct
 
 import numpy as N
-import numdisplay
+import stsci.numdisplay as numdisplay
 import ichar 
 
 """The public functions are the following.  For point, rectangle, circle

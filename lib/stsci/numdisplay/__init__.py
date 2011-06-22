@@ -94,7 +94,7 @@
         of 111292.02.  The display tool DS9 has already been started from
         the host level and awaits the array for display.  Displaying the
         array requires:
-            >>> import numdisplay
+            >>> import stsci.numdisplay as numdisplay
             >>> numdisplay.display(fdata)
         If there is a problem connecting to the DS9 application, the connection
         can be manually started using:
@@ -116,7 +116,6 @@ import numpy as n
 import math, string
 import displaydev
 import zscale as _zscale
-import overlay
 
 try:
     import geotrans
