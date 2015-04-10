@@ -82,7 +82,7 @@
 
 
 """
-from __future__ import division # confidence medium
+from __future__ import division, print_function # confidence medium
 
 from .version import *
 
@@ -383,7 +383,7 @@ class NumDisplay(object):
         if zscale:
             if transform != None:
                 if not quiet:
-                    print "transform disallowed when zscale=True"
+                    print("transform disallowed when zscale=True")
                 transform = None
 
             z1, z2 = _zscale.zscale(pix, contrast=contrast)
@@ -435,7 +435,7 @@ class NumDisplay(object):
         # array as the one to be displayed, even though it may not be ideal.
         if _z1 == _z2:
             if not quiet:
-                print 'Error encountered during transformation. No transformation applied...'
+                print('Error encountered during transformation. No transformation applied...')
             bpix = pix
             self.z1 = n.minimum.reduce(n.ravel(bpix))
             self.z2 = n.maximum.reduce(n.ravel(bpix))
@@ -453,7 +453,7 @@ class NumDisplay(object):
 
         _wcsinfo = displaydev.ImageWCS(bpix,z1=self.z1,z2=self.z2,name=name)
         if not quiet:
-            print 'Image displayed with Z1: ',self.z1,' Z2:',self.z2
+            print('Image displayed with Z1: ',self.z1,' Z2:',self.z2)
 
         bpix = self._fbclipImage(bpix,_d.fbwidth,_d.fbheight)
 
@@ -480,8 +480,8 @@ class NumDisplay(object):
 # Help facility
 def help():
     """ Print out doc string with syntax and example. """
-    print 'numdisplay --- Version ',__version__
-    print __doc__
+    print('numdisplay --- Version ',__version__)
+    print(__doc__)
 
 
 view = NumDisplay()
@@ -529,6 +529,6 @@ def sample() :
     # numdisplay.display(b)
     display(b)
 
-    print "The first 50 rows are ascending brightness left  to right"
-    print "The next  50 rows are ascending brightness right to left, but st"
-    print "REMEMBER THAT 0,0 IS BOTTOM LEFT"
+    print("The first 50 rows are ascending brightness left  to right")
+    print("The next  50 rows are ascending brightness right to left, but st")
+    print("REMEMBER THAT 0,0 IS BOTTOM LEFT")

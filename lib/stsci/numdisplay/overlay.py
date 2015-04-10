@@ -1,11 +1,11 @@
-from __future__ import division # confidence high
+from __future__ import division, print_function # confidence high
 
 import math
 import struct
 
 import numpy as N
 import stsci.numdisplay as numdisplay
-import ichar
+from . import ichar
 
 """The public functions are the following.  For point, rectangle, circle
 and polyline, arguments shown on separate lines are alternate ways to
@@ -100,7 +100,7 @@ def set (color=None, radius=None):
         global_color = _checkColor (color)
     if radius is not None:
         if radius < 0:
-            raise ValueError, "radius must be non-negative"
+            raise ValueError("radius must be non-negative")
         global_radius = radius
 
 
@@ -139,7 +139,7 @@ def _checkColor (color=None):
     if color is None:
         color = global_color
     elif color < C_BLACK or color > C_WHEAT:
-        raise ValueError, "%d is not a valid color" % color
+        raise ValueError("%d is not a valid color" % color)
     else:
         color = N.array ((color,), dtype=N.uint8)
     return color
@@ -203,10 +203,9 @@ def point (**kwargs):
 
     allowed_arguments = ["x", "y", "center", "color", "frame", "undo"]
     x = None; y = None; center = None; color = None; frame = None; undo = True
-    keys = kwargs.keys()
+    keys = list(kwargs.keys())
     if "center" in keys and ("x" in keys or "y" in keys):
-        raise ValueError, \
-            "Specify either 'center' or 'x' and 'y', but not both."
+        raise ValueError("Specify either 'center' or 'x' and 'y', but not both.")
     for key in keys:
         if key in allowed_arguments:
             if key == "center":
@@ -222,10 +221,9 @@ def point (**kwargs):
             elif key == "undo":
                 undo = kwargs["undo"]
         else:
-            raise ValueError, \
-            "Invalid argument to 'point'; use 'x', 'y', 'center', 'color', 'frame' or 'undo'."
+            raise ValueError("Invalid argument to 'point'; use 'x', 'y', 'center', 'color', 'frame' or 'undo'.")
     if x is None or y is None:
-        raise ValueError, "You must specify either 'x' and 'y' or 'center'."
+        raise ValueError("You must specify either 'x' and 'y' or 'center'.")
 
     color = _checkColor (color)
 
@@ -278,7 +276,7 @@ def marker (**kwargs):
 
     allowed_arguments = ["x", "y", "mark", "color", "frame", "size", "undo"]
     x = None; y = None; center = None; color = None; frame = None; undo=True
-    keys = kwargs.keys()
+    keys = list(kwargs.keys())
 
     for key in keys:
         if key in allowed_arguments:
@@ -297,10 +295,9 @@ def marker (**kwargs):
             elif key == "undo":
                 undo = kwargs["undo"]
         else:
-            raise ValueError, \
-            "Invalid argument to 'point'; use 'x', 'y', 'mark', 'size', 'color', 'frame' or 'undo'."
+            raise ValueError("Invalid argument to 'point'; use 'x', 'y', 'mark', 'size', 'color', 'frame' or 'undo'.")
     if x is None or y is None:
-        raise ValueError, "You must specify 'x' and 'y'."
+        raise ValueError("You must specify 'x' and 'y'.")
 
     color = _checkColor (color)
 
@@ -388,29 +385,29 @@ def rectangle (**kwargs):
 "  right=x2, upper=y2, width=w, height=h\n" \
 "  color and undo may also be specified."
 
-    keys = kwargs.keys()
+    keys = list(kwargs.keys())
     if "center" in keys:
         if "width" not in keys or "height" not in keys:
-            raise ValueError, error_message
+            raise ValueError(error_message)
     if "left" in keys:
         if "right" not in keys and "width" not in keys:
-            raise ValueError, error_message
+            raise ValueError(error_message)
     if "lower" in keys:
         if "upper" not in keys and "height" not in keys:
-            raise ValueError, error_message
+            raise ValueError(error_message)
     if "right" in keys:
         if "left" not in keys and "width" not in keys:
-            raise ValueError, error_message
+            raise ValueError(error_message)
     if "upper" in keys:
         if "lower" not in keys and "height" not in keys:
-            raise ValueError, error_message
+            raise ValueError(error_message)
 
     for key in keys:
         if key in allowed_arguments:
             if key == "center":
                 center = kwargs["center"]
                 if not isinstance (center, (list, tuple)):
-                    raise ValueError, error_message
+                    raise ValueError(error_message)
                 (x0, y0) = center
             elif key == "left":
                 x1 = kwargs["left"]
@@ -429,7 +426,7 @@ def rectangle (**kwargs):
             elif key == "undo":
                 undo = kwargs["undo"]
         else:
-            raise ValueError, error_message
+            raise ValueError(error_message)
 
     if x1 is None:
         if center is not None and width is not None:
@@ -453,7 +450,7 @@ def rectangle (**kwargs):
             y2 = y1 + height
 
     if x1 is None or x2 is None or y1 is None or y2 is None:
-        raise ValueError, error_message
+        raise ValueError(error_message)
 
     color = _checkColor (color)
 
@@ -537,15 +534,15 @@ def circle (**kwargs):
 "  center=(x0,y0), radius=r\n" \
 "  color, frame and undo may also be specified."
 
-    keys = kwargs.keys()
+    keys = list(kwargs.keys())
     if "center" in keys and ("x" in keys or "y" in keys):
-        raise ValueError, error_message
+        raise ValueError(error_message)
     for key in keys:
         if key in allowed_arguments:
             if key == "center":
                 center = kwargs["center"]
                 if not isinstance (center, (list, tuple)):
-                    raise ValueError, error_message
+                    raise ValueError(error_message)
                 (x0, y0) = center
             elif key == "x":
                 x0 = kwargs["x"]
@@ -560,9 +557,9 @@ def circle (**kwargs):
             elif key == "undo":
                 undo = kwargs["undo"]
         else:
-            raise ValueError, error_message
+            raise ValueError(error_message)
     if x0 is None or y0 is None or radius is None:
-        raise ValueError, error_message
+        raise ValueError(error_message)
 
     color = _checkColor (color)
 
@@ -640,19 +637,19 @@ def polyline (**kwargs):
 "  vertices=[(x1,y1), (x2,y2), (x3,y3), <...>]\n" \
 "  color, frame, or undo may also be specified."
 
-    keys = kwargs.keys()
+    keys = list(kwargs.keys())
     if "points" not in keys and "vertices" not in keys:
-        raise ValueError, error_message
+        raise ValueError(error_message)
     for key in keys:
         if key in allowed_arguments:
             if key == "points":
                 points = kwargs["points"]
                 if not isinstance (points, (list, tuple)):
-                    raise ValueError, error_message
+                    raise ValueError(error_message)
             elif key == "vertices":
                 vertices = kwargs["vertices"]
                 if not isinstance (vertices, (list, tuple)):
-                    raise ValueError, error_message
+                    raise ValueError(error_message)
             elif key == "color":
                 color = kwargs["color"]
             elif key == "frame":
@@ -660,10 +657,10 @@ def polyline (**kwargs):
             elif key == "undo":
                 undo = kwargs["undo"]
         else:
-            raise ValueError, error_message
+            raise ValueError(error_message)
 
     if points is not None and vertices is not None:
-        raise ValueError, error_message
+        raise ValueError(error_message)
     if vertices is not None:
         keyword = "vertices"
         points = vertices
@@ -681,7 +678,7 @@ def polyline (**kwargs):
     first = True
     for point in points:
         if not isinstance (point, (list, tuple)):
-            raise ValueError, expected_a_tuple
+            raise ValueError(expected_a_tuple)
         (x, y) = point
         (x, y) = _transformPoint (x, y, tx, ty)
         if first:

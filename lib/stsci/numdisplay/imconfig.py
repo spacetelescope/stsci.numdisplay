@@ -16,7 +16,7 @@ loadImtoolrc (imtoolrc=None):
         1056 1024
 
 """    
-from __future__ import division # confidence high
+from __future__ import division, print_function # confidence high
 
 import os,string,sys
 
@@ -81,7 +81,7 @@ def loadImtoolrc(imtoolrc=None):
             if name:
                 _fdin = open(name,'r')
                 break
-        except IOError, error:
+        except IOError as error:
             pass
     
     #Parse the file, line by line and populate the dictionary
@@ -106,4 +106,4 @@ def loadImtoolrc(imtoolrc=None):
     return fbdict                    
 
 def help():
-    print __doc__
+    print(__doc__)
