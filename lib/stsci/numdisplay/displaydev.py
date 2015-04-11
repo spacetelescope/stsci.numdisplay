@@ -29,13 +29,13 @@ replacement for CDL.
 $Id$
 
 """
-from __future__ import division # confidence medium
+from __future__ import division, print_function # confidence medium
 
 import os, socket, struct
 
 import numpy as n
 import string
-import imconfig
+from . import imconfig
 
 try:
     # Only try to import this on Unix-compatible systems,
@@ -47,7 +47,7 @@ try:
         FCNTL = fcntl
     else:
         import FCNTL
-except ImportError, error:
+except ImportError as error:
     fcntl = None
     # set a default that will be compatible with Win platform
     os.O_NDELAY = 0
@@ -59,7 +59,7 @@ except:
 
 try:
     SOCKTYPE = socket.AF_UNIX
-except AttributeError, error:
+except AttributeError as error:
     SOCKTYPE = socket.AF_INET
 
 SZ_BLOCK = 16384
@@ -226,17 +226,17 @@ class ImageDisplay(object):
     """Interface to IRAF-compatible image display"""
 
     # constants for IIS Protocol header packets
-    _IIS_READ =   0100000
-    _IIS_WRITE =  0400000
-    _COMMAND =    0100000
-    _PACKED =     0040000
-    _IMC_SAMPLE = 0040000
+    _IIS_READ =   32768   # octal 0100000
+    _IIS_WRITE =  131072  # octal 0400000
+    _COMMAND =    32768   # octal 0100000
+    _PACKED =     16384   # octal 0040000
+    _IMC_SAMPLE = 16384   # octal 0040000
 
-    _MEMORY = 01
-    _LUT = 02
-    _FEEDBACK = 05
-    _IMCURSOR = 020
-    _WCS = 021
+    _MEMORY = 1     # octal 01
+    _LUT    = 2     # octal 02
+    _FEEDBACK = 5   # octal 05
+    _IMCURSOR = 16  # octal 020
+    _WCS = 17       # octal 021
 
     _SZ_IMCURVAL = 160
     _SZ_WCSBUF = 320
@@ -309,7 +309,7 @@ class ImageDisplay(object):
         """
         _fbconfig = None
         # Search through all IMTOOLRC entries to find a match
-        for fb in self.fbdict.keys():
+        for fb in self.fbdict:
             if string.find(self.fbdict[fb]['name'],string.strip(stdname)) > 0:
                 _fbconfig = int(fb)
                 break
@@ -332,7 +332,7 @@ class ImageDisplay(object):
         else:
             # Otherwise, fall back to finding the buffer with the
             # size closest to the image's size.
-            for fb in self.fbdict.keys():
+            for fb in self.fbdict:
                 _fbw = self.fbdict[fb]['width']
                 _fbh = self.fbdict[fb]['height']
                 if nx == _fbw and ny == _fbh:
@@ -510,16 +510,16 @@ class ImageDisplay(object):
         # Now, for each block, write out the image section
         if _lper_block == 1:
             # send each line of image to display
-            for block in xrange(int(_nblocks)):
+            for block in range(int(_nblocks)):
                 _ydisp = _fbh - (_ty - block)
                 self.writeData(_lx,_ydisp,_fpix[block,:])
         else:
             # display each line segment separately
-            for block in xrange(int(_nblocks)):
+            for block in range(int(_nblocks)):
                 _y0 = block * _lper_block
                 _ydisp = _fbh - (_ty - _y0)
                 _xper_block = (_nx // (_nx * _lper_block))
-                for xblock in xrange(int(_xper_block)):
+                for xblock in range(int(_xper_block)):
                     _x0 = xblock * _xper_block
                     _xend = xblock + 1 * _xper_block
                     if _xend > _nx: _xend = _nx
@@ -601,7 +601,7 @@ class FifoImageDisplay(ImageDisplay):
             self._fdout = os.open(outfile, os.O_WRONLY | os.O_NDELAY)
             if fcntl:
                 fcntl.fcntl(self._fdout, FCNTL.F_SETFL, os.O_WRONLY)
-        except OSError, error:
+        except OSError as error:
             raise IOError("Cannot open image display (%s)" % (error,))
 
     def _write(self, s):
@@ -632,7 +632,7 @@ class UnixImageDisplay(ImageDisplay):
             self._socket = socket.socket(family, type)
             self._socket.connect(filename)
             self._fdin = self._fdout = self._socket.fileno()
-        except socket.error, error:
+        except socket.error as error:
             raise IOError("Cannot open image display")
 
     def close(self):
@@ -696,7 +696,7 @@ class ImageDisplayProxy(ImageDisplay):
             # Null value indicates display was probably closed
             if value:
                 return value
-        except IOError, error:
+        except IOError as error:
                 pass
         # This error can occur if image display was closed.
         # If a new display has been started then closing and
@@ -725,7 +725,7 @@ class ImageDisplayProxy(ImageDisplay):
 
 # Print help information
 def help():
-    print __doc__
+    print(__doc__)
 
 
 _display = ImageDisplayProxy()
