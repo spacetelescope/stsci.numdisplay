@@ -82,14 +82,14 @@
 
 
 """
-from __future__ import division, print_function # confidence medium
+from __future__ import absolute_import, division, print_function # confidence medium
 
 from .version import *
 
 import numpy as n
 import math, string
-import displaydev
-import zscale as _zscale
+from . import displaydev
+from . import zscale as _zscale
 
 try:
     import geotrans
