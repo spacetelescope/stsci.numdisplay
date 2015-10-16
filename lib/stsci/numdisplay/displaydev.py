@@ -34,7 +34,6 @@ from __future__ import division, print_function # confidence medium
 import os, socket, struct
 
 import numpy as n
-import string
 from . import imconfig
 
 try:
@@ -310,7 +309,7 @@ class ImageDisplay(object):
         _fbconfig = None
         # Search through all IMTOOLRC entries to find a match
         for fb in self.fbdict:
-            if string.find(self.fbdict[fb]['name'],string.strip(stdname)) > 0:
+            if self.fbdict[fb]['name'].find(stdname.strip()) > 0:
                 _fbconfig = int(fb)
                 break
         if not _fbconfig:
@@ -430,7 +429,7 @@ class ImageDisplay(object):
 
         """ Writes out WCS information for frame to display device."""
 
-        _str = string.rstrip(str(wcsinfo))
+        _str = str(wcsinfo).rstrip()
         nbytes = len(_str)
         opcode = self._IIS_WRITE | self._PACKED
         frame = 1 << (self.frame-1)
