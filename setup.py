@@ -33,7 +33,8 @@ setup(
     package_dir = {
         '':'lib'
     },
-    packages = find_packages(),
+    namespace_package = ['stsci'],
+    packages = find_packages('lib'),
     package_data = {
         '': ['LICENSE.txt'],
         'stsci/numdisplay': [
