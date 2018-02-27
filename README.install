@@ -1,3 +1,13 @@
+===================================
+This package has been deprecated!!!
+===================================
+
+For numpy DS9 display functionality please see the Imexam package:
+
+Documenetation: http://imexam.readthedocs.io/en/latest/index.html
+Github: https://github.com/spacetelescope/imexam
+
+
 Basic Installation Instructions for Numdisplay
 ===============================================
 
